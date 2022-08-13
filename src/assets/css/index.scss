@@ -1,0 +1,14 @@
+$theme-color:#007fff;//主题色
+$font-color:#515767;//字体颜色
+
+@mixin flexCss($x:center,$y:center){
+  display: flex;
+  justify-content:$x;
+  align-items:$y;
+}
+
+@mixin fontCss {
+  font-size: 14px;
+  color: #515767;
+  cursor: pointer;
+}
