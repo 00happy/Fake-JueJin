@@ -121,23 +121,27 @@ export default {
 </script>
 <style lang="scss">
 @import '@/assets/css/index.scss';
-.el-popover {
-  z-index: 2003;
+
+.popover {
+  transform-origin: center top;
+  z-index: 2005;
   position: fixed;
-  top: 480px;
-  left: 1085px !important;
+  top: 48px !important;
+  left: 1084px !important;
 }
+
 .headerWrap {
   background-color: #fff;
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0 25px;
+  padding: 0 40px;
   height: 60px;
   color: $font-color;
   font-size: 14px;
   cursor: pointer;
   .img {
+    line-height: 10px;
     img {
       width: 107px;
       height: 22px;
@@ -149,7 +153,7 @@ export default {
     @include flexCss(space-between);
   }
   .tabBar {
-    width: 30%;
+    width: 25%;
     height: 100%;
     margin: 0 20px;
     .item {
@@ -199,7 +203,7 @@ export default {
     }
   }
   .toolWrap {
-    width: 10%;
+    width: 8%;
   }
 
   .el-button {
@@ -358,11 +362,11 @@ export default {
   height: 25px;
   line-height: 25px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 8px;
 }
 .pop-item:hover {
-  background-color: #eee;
+  background-color: #f3f3f3;
 }
 .disapear {
   display: none;
@@ -373,25 +377,25 @@ export default {
 }
 .search {
   display: inline-block;
-  width: 182px;
-  margin: 0 20px 0 40px;
+  width: 282px;
+  margin: 0 20px 0 120px;
 }
 @keyframes beBig {
   from {
     width: 182px;
   }
   to {
-    width: 332px;
+    width: 452px;
   }
 }
 .bigSearch {
   animation: beBig 0.6s;
-  width: 332px;
-  margin: 0 20px 0 40px;
+  width: 452px;
+  margin: 0 20px 0 120px;
 }
 .bigPopover {
   animation: beBig 0.6s;
-  width: 332px;
+  width: 452px;
 }
 .trainMsg {
   padding: 10px 15px;

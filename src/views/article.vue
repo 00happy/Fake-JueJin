@@ -1,13 +1,13 @@
 <template>
   <div class="articleWrap" v-if="article.article_info">
     <div class="toolSide">
-      <el-badge :value="article.article_info.digg_count" class="tool">
-        <svg class="icon" aria-hidden="true">
+      <el-badge :value="digg_count" class="tool" :class="up ? 'thumbs-up' : ''">
+        <svg class="icon" aria-hidden="true" @click="handleUp">
           <use xlink:href="#icon-dianzan_kuai"></use>
         </svg>
       </el-badge>
       <el-badge :value="article.article_info.comment_count" class="tool">
-        <svg class="icon" aria-hidden="true">
+        <svg class="icon" aria-hidden="true" @click="scrollBy">
           <use xlink:href="#icon-pinglun"></use>
         </svg>
       </el-badge>
@@ -56,7 +56,7 @@
       </div>
     </div>
     <div class="toolSpace"></div>
-    <div class="article">
+    <div class="article" ref="listscroll">
       <div class="contentWrap">
         <h1 v-copy="article.article_info.title">
           {{ article.article_info.title }}
@@ -150,10 +150,10 @@
           </div>
         </div>
       </div>
-      <div class="category" v-if="cateArr.length">
+      <div class="category" v-if="cateArr.length" :class="tabShow ? 'slideDowm1' : 'slideUP1'">
         <span>目录</span>
         <el-divider></el-divider>
-        <Category :cateList="cateArr" :baseSize="baseSize" />
+        <Category :cateList="cateArr" :baseSize="baseSize" @share="share" />
       </div>
     </aside>
   </div>
@@ -180,10 +180,20 @@ export default {
       cursor: '',
       baseSize: 1,
       childList: [],
+      bol: false,
+      up: false,
     }
   },
   mixins: [getBottom],
   methods: {
+    scrollBy() {
+      let obj = document.querySelector('.comment').getBoundingClientRect().top - 100
+      window.scrollBy(0, obj)
+    },
+    handleUp() {
+      console.log(this.up)
+      this.up = !this.up
+    },
     getList() {
       let item_id = this.$router.currentRoute.query.id
       let cursor = this.cursor
@@ -225,6 +235,11 @@ export default {
           }
         }
       }
+    },
+    share() {
+      setTimeout(() => {
+        window.scrollBy(0, -70)
+      }, 10)
     },
   },
   components: {
@@ -293,6 +308,13 @@ export default {
     categoryCursor() {
       return this.$store.getters.getCategoryCursor
     },
+    digg_count() {
+      if (this.up) {
+        return this.article.article_info.digg_count + 1
+      } else {
+        return this.article.article_info.digg_count
+      }
+    },
   },
 }
 </script>
@@ -306,6 +328,11 @@ export default {
   .toolSide {
     position: fixed;
     left: 100px;
+    .thumbs-up {
+      ::v-deep .icon {
+        color: #1e80ff !important;
+      }
+    }
     .tool {
       width: 48px;
       height: 48px;
@@ -595,7 +622,7 @@ export default {
   right: 11px;
 }
 .shareProper {
-  left: 55px !important;
+  left: 140px !important;
   margin: 0;
   padding: 10px 0;
   .share {

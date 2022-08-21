@@ -1,14 +1,22 @@
 <template>
   <div class="cateWrap" v-if="cateList.length" @scroll="sideScroll">
-    <a v-for="(item, index) in cateList" :key="index" :style="cateCss(item.nodeName)" @click="switchCursor(index, $event)" :class="index == categoryCursor ? 'tab' : ''">{{ item.text }} </a>
+    <a v-for="(item, index) in cateList" :key="index" :style="cateCss(item.nodeName)" @click="switchCursor(index, $event)" :class="index == id ? 'tab' : ''">{{ item.text }} </a>
   </div>
 </template>
 
 <script>
+import tabBarShow from '@/mixins/tabBarShow.js'
+
 export default {
   props: {
     cateList: [],
     baseSize: Number,
+  },
+  mixins: [tabBarShow],
+  data() {
+    return {
+      id: 0,
+    }
   },
   computed: {
     cateCss() {
@@ -27,8 +35,10 @@ export default {
   },
   methods: {
     switchCursor(index, e) {
-      e.target.href = `#cateHref${index + 1}`
+      e.target.href = `#cateHref${index}`
+      this.id = index
       this.$store.commit('setCategoryCursor', index)
+      this.$emit('share')
     },
     sideScroll() {
       let activeTop = document.getElementsByClassName('cateWrap')[0].getBoundingClientRect().top

@@ -18,7 +18,7 @@
         <el-skeleton :rows="4" animated />
       </div>
     </div>
-    <aside>
+    <aside v-if="!adShow">
       <div class="top">
         <div class="head">
           <div>
@@ -66,6 +66,10 @@
         <p>完整榜单 <i class="el-icon-arrow-right"></i></p>
       </div>
     </aside>
+    <aside v-if="adShow" class="adshow">
+      <Advertise v-for="(item, index) in adList" :key="index" :imgSrc="item" />
+      <DownJuejin />
+    </aside>
   </div>
 </template>
 
@@ -106,6 +110,7 @@ export default {
         },
       ],
       value: '3天内',
+      adShow: false,
     }
   },
   methods: {
@@ -138,7 +143,7 @@ export default {
           }
         }
 
-        console.log(this.articleList)
+        // console.log(this.articleList)
       })
     },
     selectType(sortType) {
@@ -148,10 +153,19 @@ export default {
       this.$store.commit('setSortType', parseInt(sortType))
       this.getList()
     },
+    handleScroll() {
+      let scrollHeight = document.documentElement.scrollTop //滚动条高度
+      if (scrollHeight > 1300) {
+        this.adShow = true
+      } else {
+        this.adShow = false
+      }
+    },
   },
   created() {
     this.getList()
     this.sortType = parseInt(this.$store.getters.getSortType)
+    window.addEventListener('scroll', this.scrollChange)
   },
   computed: {
     cateId() {
@@ -159,9 +173,6 @@ export default {
     },
   },
   watch: {
-    getBottom(newVal, oldVal) {
-      console.log(newVal, oldVal)
-    },
     cateId(newVal) {
       this.articleList = []
       this.cate_id = newVal
@@ -169,10 +180,21 @@ export default {
     },
   },
   mixins: [getBottom],
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
 }
 </script>
 <style lang="scss" scoped>
 @import '@/assets/css/index.scss';
+.adshow {
+  position: sticky;
+  top: 64px;
+  right: 0;
+}
 .home {
   border-radius: 2px;
   @include flexCss();
